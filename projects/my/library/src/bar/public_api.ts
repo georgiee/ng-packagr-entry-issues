@@ -8,8 +8,8 @@ import { Component, NgModule } from '@angular/core';
 })
 export class BarComponent {
   message = 'non';
-  constructor(private foo: FooClass) {
-    this.message = `${foo.hello()} + ${STATIC_FOO_VALUE} + ${STATIC_MAIN_ENTRY_VALUE}`;
+  constructor() {
+    this.message = `${STATIC_FOO_VALUE} + ${STATIC_MAIN_ENTRY_VALUE}`;
   }
 }
 
@@ -22,7 +22,6 @@ export class BarComponent {
     BarComponent
   ],
   providers: [
-    FooClass
   ]
 })
 export class BarModule { }
