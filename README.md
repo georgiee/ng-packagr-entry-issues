@@ -1,4 +1,5 @@
 # NgPackagrEntryIssues
+Example for https://github.com/dherges/ng-packagr/issues/854
 
 ## Create our baseline
 ```
@@ -77,3 +78,87 @@ You clearly see a wrong library path beign generated `Built @my/library/src/foo`
 Fixed by moving everything out of the `src/` folder and adjusting the ng-package.json. Also fix the tsconfig to keep the app running.
 
 We still get an error.
+
+### Third error: Reference to main entry point.
+That's the remaining error:
+
+```
+BUILD ERROR
+projects/my/library/bar/public_api.ts(1,41): error TS2307: Cannot find module '@my/library'.
+
+Error: projects/my/library/bar/public_api.ts(1,41): error TS2307: Cannot find module '@my/library'.
+
+    at Object.<anonymous> (ng-packagr-entry-issues/node_modules/ng-packagr/lib/ngc/compile-source-files.js:53:68)
+    at Generator.next (<anonymous>)
+    at ng-packagr-entry-issues/node_modules/ng-packagr/lib/ngc/compile-source-files.js:7:71
+    at new Promise (<anonymous>)
+    at __awaiter (ng-packagr-entry-issues/node_modules/ng-packagr/lib/ngc/compile-source-files.js:3:12)
+    at Object.compileSourceFiles (ng-packagr-entry-issues/node_modules/ng-packagr/lib/ngc/compile-source-files.js:19:12)
+    at Object.<anonymous> (ng-packagr-entry-issues/node_modules/ng-packagr/lib/ng-v5/entry-point/ts/compile-ngc.transform.js:44:32)
+    at Generator.next (<anonymous>)
+    at ng-packagr-entry-issues/node_modules/ng-packagr/lib/ng-v5/entry-point/ts/compile-ngc.transform.js:7:71
+    at new Promise (<anonymous>)
+```
+
+Caused by a reference from the secondary entry point to the main library.
+Fixed by removing the import `import { STATIC_MAIN_ENTRY_VALUE } from '@my/library';` in bar/public_api.ts.
+
+
+## Final Test
+With our working (but reduced in functionality (no injection, no main entry reference)) we can do the final test.
+Integrate the built library in the app. The build is in dist/@my/library.
+
+Let's point to it in the tsconfig.json
+
+```
+"paths": {
+  "@my/library": [ "dist/@my/library"],
+  "@my/library/*": [ "dist/@my/library/*/"]
+}
+```
+and run a `ng build --prod` for an AOT build.
+
+Works.
+
+
+## Conclusion
+1. Paths are wrong for entry points not located in the root
+Base path is calculated from the root of the library (@my/library) not from the location of the entry point file (@my/library/src/public-api)
+Workaround: Remove the src folder.
+
+2. There is a problem with injections. You get a `isSkipSelf` null error.
+I remember that I had this problem sometimes but I can't nail the origin. My current project (Angular 5 with ng-packagr 2) is running fine with injected values.
+So it's probably related to ng-packagr 3 or Angular 6. I guess ng-packagr 3. Seems to be related to my other issue: https://github.com/dherges/ng-packagr/issues/852
+
+3. There is a problem with dependencies from the main entry point inside secondary entry points.
+By the way, this problems is in there since the secodnary entry point feature landed in ng-packagr.
+
+My workaround was to convert dependencies in the main entry to secondary entry points and import it from there.
+
+###Environment
+```
+Angular CLI: 6.0.1
+Node: 8.9.4
+OS: darwin x64
+Angular: 6.0.1
+... animations, cli, common, compiler, compiler-cli, core, forms
+... http, language-service, platform-browser
+... platform-browser-dynamic, router
+
+Package                            Version
+------------------------------------------------------------
+@angular-devkit/architect          0.6.1
+@angular-devkit/build-angular      0.6.1
+@angular-devkit/build-ng-packagr   0.6.1
+@angular-devkit/build-optimizer    0.6.1
+@angular-devkit/core               0.6.1
+@angular-devkit/schematics         0.6.1
+@ngtools/json-schema               1.1.0
+@ngtools/webpack                   6.0.1
+@schematics/angular                0.6.1
+@schematics/update                 0.6.1
+ng-packagr                         3.0.0-rc.4
+rxjs                               6.1.0
+typescript                         2.7.2
+webpack                            4.6.0
+```
