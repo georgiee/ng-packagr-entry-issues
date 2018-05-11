@@ -17,9 +17,8 @@
       "dom"
     ],
     "paths": {
-      "library": [
-        "dist/library"
-      ]
+      "@my/library": [ "projects/my/library/src/public_api"],
+      "@my/library/*": [ "projects/my/library/src/*/public_api"]
     }
   }
 }

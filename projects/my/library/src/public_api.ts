@@ -2,6 +2,4 @@
  * Public API Surface of library
  */
 
-export * from './lib/library.service';
-export * from './lib/library.component';
-export * from './lib/library.module';
+export const STATIC_MAIN_ENTRY_VALUE = 'main-entry-value';
