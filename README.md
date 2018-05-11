@@ -29,3 +29,22 @@ Good. Let's build the library:
 ```
 ng build @my/library
 ```
+
+### First error: isSkipSelf
+```
+Cannot read property 'isSkipSelf' of null
+TypeError: Cannot read property 'isSkipSelf' of null
+    at ProviderElementContext._getDependency (ng-packagr-entry-issues/node_modules/@angular/compiler/bundles/compiler.umd.js:11389:18)
+    at ng-packagr-entry-issues/node_modules/@angular/compiler/bundles/compiler.umd.js:11334:60
+    at Array.map (<anonymous>)
+    at ng-packagr-entry-issues/node_modules/@angular/compiler/bundles/compiler.umd.js:11334:26
+    at Array.map (<anonymous>)
+    at ProviderElementContext._getOrCreateLocalProvider (ng-packagr-entry-issues/node_modules/@angular/compiler/bundles/compiler.umd.js:11312:63)
+    at ng-packagr-entry-issues/node_modules/@angular/compiler/bundles/compiler.umd.js:11210:23
+    at Array.forEach (<anonymous>)
+    at new ProviderElementContext (ng-packagr-entry-issues/node_modules/@angular/compiler/bundles/compiler.umd.js:11207:49)
+    at TemplateParseVisitor.visitElement (ng-packagr-entry-issues/node_modules/@angular/compiler/bundles/compiler.umd.js:14961:31)
+```
+
+Fix: Remove Injection (see `v2.1`)
+The build still fails with another error.
