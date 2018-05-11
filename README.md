@@ -77,3 +77,28 @@ You clearly see a wrong library path beign generated `Built @my/library/src/foo`
 Fixed by moving everything out of the `src/` folder and adjusting the ng-package.json. Also fix the tsconfig to keep the app running.
 
 We still get an error.
+
+### Third error: Reference to main entry point.
+That's the remaining error:
+
+```
+BUILD ERROR
+projects/my/library/bar/public_api.ts(1,41): error TS2307: Cannot find module '@my/library'.
+
+Error: projects/my/library/bar/public_api.ts(1,41): error TS2307: Cannot find module '@my/library'.
+
+    at Object.<anonymous> (ng-packagr-entry-issues/node_modules/ng-packagr/lib/ngc/compile-source-files.js:53:68)
+    at Generator.next (<anonymous>)
+    at ng-packagr-entry-issues/node_modules/ng-packagr/lib/ngc/compile-source-files.js:7:71
+    at new Promise (<anonymous>)
+    at __awaiter (ng-packagr-entry-issues/node_modules/ng-packagr/lib/ngc/compile-source-files.js:3:12)
+    at Object.compileSourceFiles (ng-packagr-entry-issues/node_modules/ng-packagr/lib/ngc/compile-source-files.js:19:12)
+    at Object.<anonymous> (ng-packagr-entry-issues/node_modules/ng-packagr/lib/ng-v5/entry-point/ts/compile-ngc.transform.js:44:32)
+    at Generator.next (<anonymous>)
+    at ng-packagr-entry-issues/node_modules/ng-packagr/lib/ng-v5/entry-point/ts/compile-ngc.transform.js:7:71
+    at new Promise (<anonymous>)
+```
+
+Caused by a reference from the secondary entry point to the main library.
+Fixed by removing the import `import { STATIC_MAIN_ENTRY_VALUE } from '@my/library';` in bar/public_api.ts.
+

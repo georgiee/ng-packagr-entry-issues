@@ -1,4 +1,3 @@
-import { STATIC_MAIN_ENTRY_VALUE } from '@my/library';
 import { STATIC_FOO_VALUE, FooClass } from '@my/library/foo';
 import { Component, NgModule } from '@angular/core';
 
@@ -9,7 +8,7 @@ import { Component, NgModule } from '@angular/core';
 export class BarComponent {
   message = 'non';
   constructor() {
-    this.message = `${STATIC_FOO_VALUE} + ${STATIC_MAIN_ENTRY_VALUE}`;
+    this.message = `${STATIC_FOO_VALUE}`;
   }
 }
 
