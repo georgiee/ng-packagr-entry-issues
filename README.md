@@ -1,6 +1,15 @@
 # NgPackagrEntryIssues
 Example for https://github.com/dherges/ng-packagr/issues/854
 
+Quick overview:
+
++ [v1.0](https://github.com/georgiee/ng-packagr-entry-issues/tree/v1.0) - `ng build @my/library` works. But not secomdary entry points yet
++ [v2.0](https://github.com/georgiee/ng-packagr-entry-issues/tree/v2.0)  - `ng build @my/library` fails due to Injection (Cannot read property 'isSkipSelf' of null)
++ [v2.1](https://github.com/georgiee/ng-packagr-entry-issues/tree/v2.1)  - `ng build @my/library` fails due to src/ folder (Cannot find module '@my/library/foo'.)
++ [v2.2](https://github.com/georgiee/ng-packagr-entry-issues/tree/v2.2) - `ng build @my/library` fails due to main entry import (Cannot find module '@my/library'.)
++ [v3.0](https://github.com/georgiee/ng-packagr-entry-issues/tree/v3.0) - `ng build @my/library` works (BUT: no injection and main entry import left)
+
+
 ## Create our baseline
 ```
 ng new ng-packagr-entry-issues
@@ -51,7 +60,7 @@ Fix: Remove Injection (see `v2.1`)
 The build still fails with another error.
 
 ### Second error: Paths
-The error we get no is
+The error we get now is
 ```
 Built @my/library
 Built @my/library/src/foo
