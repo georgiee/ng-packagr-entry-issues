@@ -77,6 +77,8 @@ projects/my/library/src/bar/public_api.ts(2,44): error TS2307: Cannot find modul
 You clearly see a wrong library path beign generated `Built @my/library/src/foo`
 Fixed by moving everything out of the `src/` folder and adjusting the ng-package.json. Also fix the tsconfig to keep the app running.
 
+Checkout `v2.2` to follow.
+
 We still get an error.
 
 ### Third error: Reference to main entry point.
@@ -103,6 +105,7 @@ Error: projects/my/library/bar/public_api.ts(1,41): error TS2307: Cannot find mo
 Caused by a reference from the secondary entry point to the main library.
 Fixed by removing the import `import { STATIC_MAIN_ENTRY_VALUE } from '@my/library';` in bar/public_api.ts.
 
+Checkout `v3.0` to follow.
 
 ## Final Test
 With our working (but reduced in functionality (no injection, no main entry reference)) we can do the final test.
@@ -116,10 +119,10 @@ Let's point to it in the tsconfig.json
   "@my/library/*": [ "dist/@my/library/*/"]
 }
 ```
-and run a `ng build --prod` for an AOT build.
+if you did not follow along, make sure the library is created in the dist before by running `ng build @my/library` and run a `ng build --prod` for an AOT build
+and check the `dist/ng-packagr-entry-issues` content by serving it in a web browser.
 
-Works.
-
+Works 👏
 
 ## Conclusion
 1. Paths are wrong for entry points not located in the root
